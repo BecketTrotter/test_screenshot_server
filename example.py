@@ -12,7 +12,6 @@ async def fetch(url):
 	#return content in url
 	fn = 'screenshots/' +extract(url).domain + '.png'
 	url = 'http://18.219.180.248:8080/?url={}'.format(url)
-	#print(url)
 	try:
 		async with aiohttp.ClientSession() as client:
 			async with client.get(url, timeout = 20) as resp:
@@ -29,7 +28,7 @@ async def fetch(url):
 		pass
 
 def chunks(lst, n):
-    """Yield successive n-sized chunks from lst."""
+    """Chop the list up"""
     for i in range(0, len(lst), n):
         yield lst[i:i + n]
 
@@ -39,7 +38,6 @@ async def main():
 	
 	batch_size = 10
 	async with Pool(processes = 5) as pool:
-		
 		for l in list(chunks(urls, batch_size)):
 			loop_start = time.time()
 			found = await pool.map(fetch, l)
